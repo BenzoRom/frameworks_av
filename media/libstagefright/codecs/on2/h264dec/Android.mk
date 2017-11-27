@@ -85,7 +85,7 @@ MY_OMXDL_ASM_SRC := \
 	./omxdl/arm_neon/vc/m4p10/src_gcc/omxVCM4P10_TransformDequantChromaDCFromPair_s.S \
 
 
-ifeq ($(ARCH_ARM_HAVE_NEON),true)
+ifeq ($(TARGET_2ND_ARCH_VARIANT=), armv8-a)
     LOCAL_ARM_NEON   := true
     LOCAL_CFLAGS_arm     := -DH264DEC_NEON -DH264DEC_OMXDL
     LOCAL_SRC_FILES_arm  := $(MY_ASM) $(MY_OMXDL_C_SRC) $(MY_OMXDL_ASM_SRC)

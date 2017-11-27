@@ -34,7 +34,7 @@ LOCAL_SRC_FILES += \
 	src/transform.c \
 	src/memalign.c
 
-ifneq ($(ARCH_ARM_HAVE_NEON),true)
+ifneq ($(TARGET_2ND_ARCH_VARIANT=), armv8-a)
     LOCAL_SRC_FILES_arm := \
         src/asm/ARMV5E/AutoCorrelation_v5.s \
         src/asm/ARMV5E/band_nrg_v5.s \

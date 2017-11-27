@@ -50,7 +50,7 @@ LOCAL_SRC_FILES := \
 	src/weight_a.c \
 	src/mem_align.c
 
-ifneq ($(ARCH_ARM_HAVE_NEON),true)
+ifneq ($(TARGET_2ND_ARCH_VARIANT=), armv8-a)
     LOCAL_SRC_FILES_arm := \
         src/asm/ARMV5E/convolve_opt.s \
         src/asm/ARMV5E/cor_h_vec_opt.s \
