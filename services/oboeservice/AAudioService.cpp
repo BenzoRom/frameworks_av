@@ -26,6 +26,8 @@
 #include <mediautils/SchedulingPolicyService.h>
 #include <utils/String16.h>
 
+#include <android-base/properties.h>
+
 #include "binding/AAudioServiceMessage.h"
 #include "AAudioClientTracker.h"
 #include "AAudioEndpointManager.h"
@@ -272,18 +274,21 @@ aaudio_result_t AAudioService::registerAudioThread(aaudio_handle_t streamHandle,
     } else {
         const pid_t ownerPid = IPCThreadState::self()->getCallingPid(); // TODO review
         serviceStream->setRegisteredThread(clientThreadId);
-#if 1
-        int err = android::requestPriority(ownerPid, clientThreadId,
-                                           DEFAULT_AUDIO_PRIORITY, true /* isForApp */);
-#else
-    uint64_t runtime =         500 * 1000ull;
-    uint64_t deadline = 2.5 * 1000 * 1000ull;
-    uint64_t period =   2.5 * 1000 * 1000ull;
 
-    int err = android::requestPriorityDL(ownerPid, clientThreadId,
+    int err = 1;
+    if (!android::base::GetBoolProperty("aaudio.dl_scheduler", false)) {
+        err = android::requestPriority(ownerPid, clientThreadId,
+                                       DEFAULT_AUDIO_PRIORITY, true /* isForApp */);
+    } else {
+        uint64_t period   = android::base::GetUintProperty<uint64_t>("aaudio.dl_period", 4 * 1000 * 1000ull);
+        uint64_t deadline = android::base::GetUintProperty<uint64_t>("aaudio.dl_deadline", period);
+        uint64_t runtime  = android::base::GetUintProperty<uint64_t>("aaudio.dl_runtime", period >> 2);
+
+        err = android::requestPriorityDL(ownerPid, clientThreadId,
                                          runtime, deadline, period,
                                          true /* isForApp */);
-#endif
+    }
+
         if (err != 0) {
             ALOGE("AAudioService::registerAudioThread(%d) failed, errno = %d, priority = %d",
                   clientThreadId, errno, DEFAULT_AUDIO_PRIORITY);
