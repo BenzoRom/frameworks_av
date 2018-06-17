@@ -52,6 +52,8 @@ cc_library_static {
         "src/mem_align.c",
     ],
 
+    polly: false,
+
     arch: {
         arm: {
             srcs: [

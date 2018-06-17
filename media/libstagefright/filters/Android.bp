@@ -29,6 +29,8 @@ cc_library_static {
         "libhidlmemory",
     ],
 
+    polly: false,
+
     sanitize: {
         cfi: true,
         diag: {

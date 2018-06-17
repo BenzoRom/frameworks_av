@@ -23,6 +23,8 @@ cc_library_shared {
         "liblog",
     ],
 
+   openmp: true,
+
     ldflags: ["-Wl,-Bsymbolic"],
 
     sanitize: {

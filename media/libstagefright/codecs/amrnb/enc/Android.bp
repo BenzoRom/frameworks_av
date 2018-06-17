@@ -70,6 +70,8 @@ cc_library_static {
         "-Werror",
     ],
 
+   polly: false,
+
     //addressing b/25409744
     //sanitize: {
     //    misc_undefined: [
