@@ -258,8 +258,6 @@ cc_library {
             cfi: true,
         },
     },
-
-    use_clang_lld: false,
 }
 
 cc_library {
